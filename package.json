@@ -1,0 +1,43 @@
+{
+  "name": "czaczanka",
+  "version": "0.1.0",
+  "description": "Markdown + Vue widgets → static docs site generator",
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": false,
+  "bin": {
+    "czaczanka": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./runtime": {
+      "types": "./dist/runtime/mount.d.ts",
+      "default": "./dist/runtime/mount.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "bun test",
+    "lint": "oxlint",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "esbuild": "^0.27.0",
+    "markdown-it": "^14.1.0",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^25.9.1",
+    "oxlint": "^1.79.0",
+    "typescript": "^7.0.2"
+  }
+}
