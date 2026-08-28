@@ -71,6 +71,7 @@ export async function build(opts: BuildOptions = {}): Promise<BuiltPage[]> {
 
   const md = createMarkdown();
   const files = await walk(contentDir);
+  files.sort((a, b) => a.localeCompare(b, "en", { numeric: true }));
 
   const pages: BuiltPage[] = [];
   const rendered: Array<BuiltPage & { html: string }> = [];
@@ -87,14 +88,20 @@ export async function build(opts: BuildOptions = {}): Promise<BuiltPage[]> {
     } else {
       outPath = parts.join("/").replace(/\.md$/, ".html");
     }
-    const url = "/" + outPath.replace(/\/?index\.html$/, "/");
+    const url = outPath.endsWith("index.html")
+      ? "/" + outPath.slice(0, -"index.html".length)
+      : "/" + outPath;
 
     const page = { outPath, title, url };
     pages.push(page);
     rendered.push({ ...page, html });
   }
 
-  const nav = pages.map((p) => `<a href="${p.url}">${p.title}</a>`).join("");
+  // The root landing page (`index.html`) is reachable via the brand link, so
+  // it is not repeated in the nav.
+  const navItems = pages
+    .filter((p) => p.outPath !== "index.html")
+    .map((p) => ({ url: p.url, title: p.title }));
 
   let clientEntry = opts.clientEntry;
   if (!clientEntry) {
@@ -108,7 +115,10 @@ export async function build(opts: BuildOptions = {}): Promise<BuiltPage[]> {
   for (const p of rendered) {
     const dest = join(outDir, p.outPath);
     await mkdir(dirname(dest), { recursive: true });
-    await writeFile(dest, renderLayout({ name, title: p.title, nav, content: p.html, hasClient }));
+    await writeFile(
+      dest,
+      renderLayout({ name, title: p.title, nav: navItems, content: p.html, hasClient, currentUrl: p.url }),
+    );
   }
 
   const assetsDir = join(outDir, "assets");

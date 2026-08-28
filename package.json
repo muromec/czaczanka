@@ -1,6 +1,6 @@
 {
   "name": "czaczanka",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Markdown + Vue widgets → static docs site generator",
   "type": "module",
   "license": "MIT",
@@ -31,13 +31,22 @@
   },
   "dependencies": {
     "esbuild": "^0.27.0",
-    "markdown-it": "^14.1.0",
+    "highlight.js": "^11.12.0",
+    "markdown-it": "^14.1.0"
+  },
+  "peerDependencies": {
     "vue": "^3.5.13"
+  },
+  "peerDependenciesMeta": {
+    "vue": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^25.9.1",
     "oxlint": "^1.79.0",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vue": "^3.5.13"
   }
 }
